@@ -35,6 +35,10 @@ public class PropertyDelController {
                 .map(user -> ResponseEntity.ok(user.getProperties()))
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/available")
+    public List<PropertyDel> getAvailableProperties() {
+        return propertyDelService.getAvailableProperties();
+    }
 
     // POST: Save a new property and associate it with a user
     @PostMapping("/{username}")

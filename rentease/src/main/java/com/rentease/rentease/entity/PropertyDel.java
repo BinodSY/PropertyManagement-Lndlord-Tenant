@@ -16,4 +16,6 @@ public class PropertyDel {
     private double rentAmount;
     private int bedRooms;
     private int bathRooms;
+    private boolean available;
+
 }

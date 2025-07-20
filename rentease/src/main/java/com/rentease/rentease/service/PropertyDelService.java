@@ -23,9 +23,11 @@ public class PropertyDelService {
     public PropertyDel updateProperty(PropertyDel property) {
         return propertyDelRepo.save(property);
     }
-    // Additional methods for delete, find by ID, etc. can be added here
-    // For example, you can add a method to delete a property by ID:
-    
+   
+   public List<PropertyDel> getAvailableProperties() {
+        return propertyDelRepo.findByAvailable(true);
+    }
+
     public boolean deletePropertyIfExists(String Id) {
         if (propertyDelRepo.existsById(Id)) {
             propertyDelRepo.deleteById(Id);

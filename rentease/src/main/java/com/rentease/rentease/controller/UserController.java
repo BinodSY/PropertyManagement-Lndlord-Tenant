@@ -44,7 +44,12 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    
+    @PostMapping
+    public ResponseEntity<User> UserCreate(@RequestBody User user) {
+        User savedUser = userService.createUser(user);
+        return ResponseEntity.ok(savedUser);
+    }
     
     @PutMapping("/{username}")
     public ResponseEntity<User> updatePassword(@PathVariable String username, @RequestBody User user) {
@@ -62,11 +67,7 @@ public class UserController {
 
     
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.createUser(user);
-        return ResponseEntity.ok(savedUser);
-    }
+   
 
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable String username) {
