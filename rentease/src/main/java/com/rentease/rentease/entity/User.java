@@ -11,7 +11,7 @@ import java.util.List;
 import io.micrometer.common.lang.NonNull;
 import lombok.Data;
 
-@Document(collection = "users")
+@Document(collection = "Landlords")
 @Data
 public class User {
 
@@ -22,14 +22,16 @@ public class User {
     private String username;
     @NonNull
     private String password;
+    @NonNull
+    private String email;
+    @NonNull
+    private String name;
+    private String role = "ROLE_LANDLORD";
+    
     @DBRef
     private List<PropertyDel> properties=new ArrayList<>();
     @DBRef
     private List<Lease> leases=new ArrayList<>();
  // Assuming you have a Role entity defined
-    
-  
-
-
 
 }

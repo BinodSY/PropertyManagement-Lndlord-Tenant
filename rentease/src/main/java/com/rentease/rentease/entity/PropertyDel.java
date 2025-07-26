@@ -17,5 +17,5 @@ public class PropertyDel {
     private int bedRooms;
     private int bathRooms;
     private boolean available;
-
+    
 }

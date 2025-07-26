@@ -91,35 +91,44 @@ public class PropertyDelController {
     }
 
 
-    // DELETE: Delete a property and remove its reference from the owner
-    @DeleteMapping("/{username}/{Id}")
-    public ResponseEntity<Void> deleteProperty(@PathVariable String username, @PathVariable Optional<String> Id) {
+    // DELETE: Delete a specific property by its ID
+    @DeleteMapping("/{username}/{propertyId}")
+    public ResponseEntity<Void> deleteProperty(@PathVariable String username, @PathVariable String propertyId) {
         Optional<User> userOptional = userService.findByUsername(username);
         if (userOptional.isEmpty()) {
             return ResponseEntity.notFound().build(); // User not found
         }
         User user = userOptional.get();
 
-        if (Id.isPresent()) {
-            // Delete a specific property by ID
-            String propertyId = Id.get();
-            PropertyDel propertyToDelete = propertyDelService.findById(propertyId);
+        PropertyDel propertyToDelete = propertyDelService.findById(propertyId);
 
-            if (propertyToDelete == null || !propertyToDelete.getHouseOwner().equals(username)) {
-                return ResponseEntity.notFound().build(); // Property not found or doesn't belong to the user
-            }
-
-            // Remove reference from user's properties
-            user.getProperties().removeIf(p -> p.getId().equals(propertyId));
-            userService.createUser(user); // Update the user
-            // Delete the property itself
-            propertyDelService.deletePropertyIfExists(propertyId);
-        } else {
-            // Delete all properties associated with the user
-            user.getProperties().forEach(property -> propertyDelService.deletePropertyIfExists(property.getId()));
-            user.getProperties().clear(); // Clear the list of properties for the user
-            userService.createUser(user); // Update the user
+        if (propertyToDelete == null || !propertyToDelete.getHouseOwner().equals(username)) {
+            return ResponseEntity.notFound().build(); // Property not found or doesn't belong to the user
         }
+
+        // Remove reference from user's properties
+        user.getProperties().removeIf(p -> p.getId().equals(propertyId));
+        userService.createUser(user); // Update the user
+        // Delete the property itself
+        propertyDelService.deletePropertyIfExists(propertyId);
+
+        return ResponseEntity.noContent().build(); // Return 204 No Content
+    }
+
+    // DELETE: Delete all properties for a given user
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Void> deleteAllPropertiesByUser(@PathVariable String username) {
+        Optional<User> userOptional = userService.findByUsername(username);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build(); // User not found
+        }
+        User user = userOptional.get();
+
+        // Delete all properties associated with the user
+        user.getProperties().forEach(property -> propertyDelService.deletePropertyIfExists(property.getId()));
+        user.getProperties().clear(); // Clear the list of properties for the user
+        userService.createUser(user); // Update the user
+
         return ResponseEntity.noContent().build(); // Return 204 No Content
     }
 
