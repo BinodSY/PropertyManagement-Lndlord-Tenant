@@ -1,11 +1,15 @@
 package com.rentease.rentease.controller;
-import java.util.List;
+import java.util.*;
 
 import com.rentease.rentease.entity.Tenant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,34 +17,56 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rentease.rentease.service.TenantService;
 
+
+
 @RestController
-@RequestMapping("/tenants")
+@RequestMapping("/tenant")
 public class TenantController {
 
 
     @Autowired
-
     private TenantService tenantService;
     
+    @GetMapping("/test")
+    public String test(){
+        return "Hello from TenantController";
+     }  
+    
+    
+    
+    // @GetMapping("/all")
+    // public ResponseEntity<List<Tenant>> getAllTenants() {
+    //     return ResponseEntity.ok(tenantService.getAllTenants());
+    // }
 
-    @GetMapping
-    public List<Tenant> getAllTenants() {
-        return tenantService.getAllTenants();
-    }
 
-
-    @GetMapping("/{username}")
-    public Tenant getTenantByUsername(@PathVariable String username) {
-        return tenantService.getUsernamTenante(username)
-                .orElseThrow(() -> new RuntimeException("Tenant not found with username: " + username));
-    }
-    @PostMapping
+    
+    @PostMapping("/create-tenant")
     public Tenant createTenant(@RequestBody Tenant tenant) {
         return tenantService.createTenant(tenant);
     }
-    @DeleteMapping("/{id}")
-    public void deleteTenant(@PathVariable String id) {
-        tenantService.deleteTenant(id);
+    @PutMapping("/update-tenant")
+    public ResponseEntity<Tenant> updateTenant(@RequestBody Tenant tenant) {    
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Tenant> existingTenant = tenantService.getUsernamTenante(authentication.getName());
+        if (existingTenant.isPresent()) {
+            Tenant updatedTenant = tenantService.updateTenant(existingTenant.get().getId(), tenant);
+            return ResponseEntity.ok(updatedTenant);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @DeleteMapping
+    public ResponseEntity<String> deleteTenant() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<Tenant> tenant = tenantService.getUsernamTenante(authentication.getName());
+        if (tenant.isPresent()) {
+            tenantService.deleteTenant(tenant.get().getId());
+            return ResponseEntity.ok("Tenant deleted successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
    

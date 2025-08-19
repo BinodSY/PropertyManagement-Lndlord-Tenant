@@ -2,8 +2,11 @@ package com.rentease.rentease.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import com.rentease.rentease.entity.PropertyDel;
+import com.rentease.rentease.entity.User;
 import com.rentease.rentease.repository.PropertyDelRepo;
 
 
@@ -12,14 +15,37 @@ public class PropertyDelService {
 
     @Autowired
     private PropertyDelRepo propertyDelRepo;
+    @Autowired
+    private UserService userService;
+   
+
 
     public List<PropertyDel> getAllProperties() {
         return propertyDelRepo.findAll();
+    }
+    
+     @Transactional
+    public PropertyDel savePropertyAndAssignToUser(String username, PropertyDel property) {
+        // Ensure the property is linked to the correct owner
+        property.setHouseOwner(username);
+
+        // Step 1: Save property
+        PropertyDel savedProperty = propertyDelRepo.save(property);
+
+        // Step 2: Link property to user
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.getProperties().add(savedProperty);
+        userService.createUser(user);
+
+        return savedProperty;
     }
 
     public PropertyDel saveProperty(PropertyDel property) {
         return propertyDelRepo.save(property);
     }
+
     public PropertyDel updateProperty(PropertyDel property) {
         return propertyDelRepo.save(property);
     }

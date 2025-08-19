@@ -9,5 +9,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     // For example, you can add methods to find leases by houseOwner, houseId, etc.
 
     Optional<User> findByUsername(String username);
+    Optional<User> deleteByUsername(String username);
+    
 
 }
