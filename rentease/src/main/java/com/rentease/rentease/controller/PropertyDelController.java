@@ -1,10 +1,13 @@
 package com.rentease.rentease.controller;
 
 import com.rentease.rentease.entity.PropertyDel;
+// import com.rentease.rentease.entity.Tenant;
+
 import com.rentease.rentease.entity.User;
 import com.rentease.rentease.service.UserService;
 
 import com.rentease.rentease.service.PropertyDelService;
+
 
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ public class PropertyDelController {
     private PropertyDelService propertyDelService;
     @Autowired
     private UserService userService;
+    
 
     // GET: Retrieve all property details
     @GetMapping
@@ -74,7 +78,9 @@ public class PropertyDelController {
     //     // 3. Return 201 Created with the new property in the body
     //     return ResponseEntity.status(HttpStatus.CREATED).body(savedProperty);
     // }
-    @PostMapping
+
+    // POST: Save a new property and associate it with a landlord user
+    @PostMapping("/properties-listing")
     public ResponseEntity<PropertyDel> saveProperty(@RequestBody PropertyDel property) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
@@ -85,7 +91,24 @@ public class PropertyDelController {
 
     PropertyDel savedProperty = propertyDelService.savePropertyAndAssignToUser(username, property);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedProperty);
-}
+    }
+    
+    // POST: Book a property for a tenant
+   @PostMapping("/book-property")
+    public ResponseEntity<String> bookProperty(@RequestBody PropertyDel property) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tenantName = authentication.getName();
+
+        if (tenantName == null || tenantName.isEmpty()) {
+            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if username is not available
+        }
+        
+
+        String updatedProperty = propertyDelService.assignBookedPropertyToTenant(tenantName, property.getId());
+        return ResponseEntity.ok(updatedProperty);
+    }
+   
+
 
     @PutMapping()
     public ResponseEntity<PropertyDel> updateProperty(@RequestBody PropertyDel property) {

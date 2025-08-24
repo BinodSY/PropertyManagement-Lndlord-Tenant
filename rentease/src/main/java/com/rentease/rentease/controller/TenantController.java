@@ -1,6 +1,7 @@
 package com.rentease.rentease.controller;
 import java.util.*;
 
+
 import com.rentease.rentease.entity.Tenant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,7 @@ public class TenantController {
             return ResponseEntity.notFound().build();
         }
     }
+   
     
     @DeleteMapping
     public ResponseEntity<String> deleteTenant() {

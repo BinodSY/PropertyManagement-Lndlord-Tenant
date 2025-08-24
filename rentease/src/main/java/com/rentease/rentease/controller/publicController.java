@@ -12,18 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rentease.rentease.entity.PropertyDel;
 import com.rentease.rentease.entity.Tenant;
-// import com.rentease.rentease.entity.User;
+import com.rentease.rentease.entity.User;
+
 import com.rentease.rentease.service.PropertyDelService;
 import com.rentease.rentease.service.TenantService;
-// import com.rentease.rentease.service.UserService;
+import com.rentease.rentease.service.UserService;
 
 
 @RestController
 @RequestMapping("/")
 public class publicController {
 private static final String HEALTHY_RESPONSE = "Healthy";
-    // @Autowired
-    // private UserService userService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private PropertyDelService propertyDelService;
      @Autowired
@@ -49,5 +50,10 @@ private static final String HEALTHY_RESPONSE = "Healthy";
     public ResponseEntity<Tenant> UserCreate(@RequestBody Tenant tenant) {
         tenant = tenantService.createTenant(tenant);
         return ResponseEntity.ok(tenant);
+    }
+    @PostMapping("/create-landlord")
+    public ResponseEntity<User> UserCreate(@RequestBody User user) {
+        User savedUser = userService.createUser(user);
+        return ResponseEntity.ok(savedUser);
     }
 }

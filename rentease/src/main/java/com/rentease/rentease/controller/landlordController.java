@@ -26,11 +26,11 @@ public class landlordController {
 
     
   
-    // @GetMapping("/myUsers")
-    // public ResponseEntity<List<User>> getAllUsers() {
-    //     List<User> users = userService.getAllUsers();
-    //     return ResponseEntity.ok(users);
-    // }
+    @GetMapping("/myUsers")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
 
 
     // @GetMapping("/{username}")

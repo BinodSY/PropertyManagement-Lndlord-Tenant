@@ -27,6 +27,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateAtliting(User user) {
+        return userRepository.save(user);
+    }
+
         public List<User> createUser(List<User> user) {
     return userRepository.saveAll(user);
     }

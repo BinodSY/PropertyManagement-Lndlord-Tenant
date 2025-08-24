@@ -21,11 +21,11 @@ public class SecurityConfig {
         return http 
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/propertiesDel/available").hasAnyRole("TENANT","ADMIN")
-                        .requestMatchers("/tenant/**").hasAnyRole("TENANT","ADMIN") // <-- allow both roles
-                        .requestMatchers("/landlord/").hasAnyRole("LANDLORD","ADMIN") // <-- allow both roles
-                        .requestMatchers("/**").hasRole("ADMIN")
+                        .requestMatchers("/","/create-tenant","/create-landlord").permitAll()
+                        .requestMatchers("/propertiesDel/available","/propertiesDel/book-property").hasRole("TENANT")
+                        .requestMatchers("/tenant/**").hasRole("TENANT") // <-- allow both roles
+                        .requestMatchers("/landlord/","/propertiesDel/user-properties","/propertiesDel/properties-listing").hasRole("LANDLORD") // <-- allow both roles
+                        .requestMatchers("/adminn/**").hasRole("Rentease_ADMIN@")
                         .anyRequest().authenticated()
                         
                 )
