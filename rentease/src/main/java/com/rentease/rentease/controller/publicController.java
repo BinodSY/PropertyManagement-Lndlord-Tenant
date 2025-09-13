@@ -30,9 +30,13 @@ private static final String HEALTHY_RESPONSE = "Healthy";
      @Autowired
     private TenantService tenantService;
 
-    @GetMapping
+    @GetMapping("/health")
     public String checkHealth() {
         return HEALTHY_RESPONSE;
+    }
+    @GetMapping()
+    public String welocome() {
+        return "Welcome to RentEase";
     }
 
     @GetMapping("/properties")

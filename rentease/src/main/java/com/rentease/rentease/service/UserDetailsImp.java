@@ -22,12 +22,12 @@ public class UserDetailsImp implements UserDetailsService {
     private UserRepository landlordRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Try to find user in tenant collection
-        Tenant tenant = tenantRepository.findByUsername(username).orElse(null);
+        Tenant tenant = tenantRepository.findByEmail(email).orElse(null);
         if (tenant != null) {
             UserDetails tenantUser = org.springframework.security.core.userdetails.User
-                    .withUsername(tenant.getUsername())
+                    .withUsername(tenant.getEmail())
                     .password(tenant.getPassword())
                     .roles(tenant.getRole()) // e.g., "TENANT"
                     .build();
@@ -35,10 +35,10 @@ public class UserDetailsImp implements UserDetailsService {
         }
 
         // Try to find user in landlord collection
-        User landlord = landlordRepository.findByUsername(username).orElse(null);
+        User landlord = landlordRepository.findByEmail(email).orElse(null);
         if (landlord != null) {
             UserDetails landlordUser = org.springframework.security.core.userdetails.User
-                    .withUsername(landlord.getUsername())
+                    .withUsername(landlord.getEmail())
                     .password(landlord.getPassword())
                     .roles(landlord.getRole()) // e.g., "LANDLORD"
                     .build();
@@ -46,6 +46,6 @@ public class UserDetailsImp implements UserDetailsService {
 
         }
 
-        throw new UsernameNotFoundException("User not found with username: " + username);
+        throw new UsernameNotFoundException("User not found with email: " + email);
     }
 }

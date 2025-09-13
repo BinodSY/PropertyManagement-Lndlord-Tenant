@@ -2,7 +2,7 @@ package com.rentease.rentease.controller;
 
 
 import com.rentease.rentease.entity.User;
-import com.rentease.rentease.service.PropertyDelService;
+// import com.rentease.rentease.service.PropertyDelService;
 import com.rentease.rentease.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class landlordController {
     @Autowired
     private UserService userService;
     
-    @Autowired
-    private PropertyDelService propertyDelService;
+    // @Autowired
+    // private PropertyDelService propertyDelService;
 
     
   
@@ -80,22 +80,22 @@ public class landlordController {
     }
     // Endpoint to delete the user and all associated properties
     
-    @DeleteMapping("/delete-my-account")
-    public ResponseEntity<String> deleteMyAccount() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> userOptional = userService.findByUsername(username);
+    // @DeleteMapping("/delete-my-account")
+    // public ResponseEntity<String> deleteMyAccount() {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     String username = authentication.getName();
+    //     Optional<User> userOptional = userService.findByUsername(username);
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            // Delete all properties associated with the user
-            user.getProperties().forEach(property -> propertyDelService.deletePropertyIfExists(property.getId()));
-            user.getProperties().clear(); // Clear the list of properties for the user
-            userService.deleteUser(username); // Delete the user account
-            return ResponseEntity.ok("User and associated properties deleted successfully.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    //     if (userOptional.isPresent()) {
+    //         User user = userOptional.get();
+    //         // Delete all properties associated with the user
+    //         user.getProperties().forEach(property -> propertyDelService.deletePropertyIfExists(property.getId()));
+    //         user.getProperties().clear(); // Clear the list of properties for the user
+    //         userService.deleteUser(username); // Delete the user account
+    //         return ResponseEntity.ok("User and associated properties deleted successfully.");
+    //     } else {
+    //         return ResponseEntity.notFound().build();
+    //     }
     }
 
 
@@ -107,4 +107,4 @@ public class landlordController {
 
 
 
-}
+

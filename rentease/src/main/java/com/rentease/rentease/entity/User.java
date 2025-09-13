@@ -4,7 +4,7 @@ package com.rentease.rentease.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -24,17 +24,14 @@ public class User {
     private String username;
     @NonNull
     private String password;
+    @Indexed(unique = true)
     @NonNull
     private String email;
     @NonNull
     private String name;
     private String role = "LANDLORD";
                                                     
-    @DBRef
-    private List<PropertyDel> properties=new ArrayList<>();
-    @DBRef
-    private List<Lease> leases=new ArrayList<>();
-                                                               
-
+    private List<String> propertyIds = new ArrayList<>();
+    
     }
                                                                      

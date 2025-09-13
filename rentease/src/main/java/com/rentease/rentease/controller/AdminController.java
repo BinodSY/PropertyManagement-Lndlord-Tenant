@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +23,7 @@ import com.rentease.rentease.service.TenantService;
 
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/adminn")
 public class AdminController {
     @Autowired
     private TenantService tenantService;
@@ -31,6 +31,7 @@ public class AdminController {
     private PropertyDelService propertyDelService;
     @Autowired
     private UserService userService;
+
 
 
     @GetMapping("/landlord-users")
@@ -59,8 +60,20 @@ public class AdminController {
        
        
         return "Tenant with username " + username + " deleted successfully.";
+    }
+
+    @DeleteMapping("/deletetenantById/{Id}")
+        public String deletetennatById(@PathVariable String Id){
+            tenantService.deleteTenant(Id);
+            return "tenant deleted";
+        }
+      @DeleteMapping("/deleteLandlordById/{Id}")
+        public String deletelandlordById(@PathVariable String Id){
+            userService.deleteUser(Id);
+            return "landlord deleted";
         }
 
     
 
+    
 }

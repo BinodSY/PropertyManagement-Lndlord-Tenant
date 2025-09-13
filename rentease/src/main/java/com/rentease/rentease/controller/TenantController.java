@@ -31,14 +31,14 @@ public class TenantController {
     @GetMapping("/test")
     public String test(){
         return "Hello from TenantController";
-     }  
+    }  
     
     
     
-    // @GetMapping("/all")
-    // public ResponseEntity<List<Tenant>> getAllTenants() {
-    //     return ResponseEntity.ok(tenantService.getAllTenants());
-    // }
+    @GetMapping("/all")
+    public ResponseEntity<List<Tenant>> getAllTenants() {
+        return ResponseEntity.ok(tenantService.getAllTenants());
+    }
 
 
     

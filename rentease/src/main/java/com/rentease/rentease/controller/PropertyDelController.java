@@ -29,6 +29,11 @@ public class PropertyDelController {
     @Autowired
     private UserService userService;
     
+    @GetMapping("/test")
+    public String test(){
+        return "Hello from PropertyDelController";
+    }  
+
 
     // GET: Retrieve all property details
     @GetMapping
@@ -38,7 +43,7 @@ public class PropertyDelController {
     }
     // GET: Retrieve all property details by username
     @GetMapping("/user-properties")
-    public ResponseEntity<List<PropertyDel>> getAllPropertiesByUser() {
+    public ResponseEntity<List<String>> getAllPropertiesByUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the username from the authentication object
         if (username == null || username.isEmpty()) {
@@ -46,9 +51,10 @@ public class PropertyDelController {
         }
 
         return userService.findByUsername(username)
-                .map(user -> ResponseEntity.ok(user.getProperties()))
+                .map(user -> ResponseEntity.ok(user.getPropertyIds()))
                 .orElse(ResponseEntity.notFound().build());
     }
+    
     @GetMapping("/available")
     public List<PropertyDel> getAvailableProperties() {
         return propertyDelService.getAvailableProperties();
@@ -131,23 +137,23 @@ public class PropertyDelController {
  
 
     // DELETE: Delete all properties for a given user
-    @DeleteMapping("/delete-properties")
-    public ResponseEntity<String> deleteAllPropertiesByUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username=authentication.getName();
-        Optional<User> userOptional = userService.findByUsername(username);
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User '" + username + "' not found.");
-        }
-        User user = userOptional.get();
+    // @DeleteMapping("/delete-properties")
+    // public ResponseEntity<String> deleteAllPropertiesByUser() {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     String username=authentication.getName();
+    //     Optional<User> userOptional = userService.findByUsername(username);
+    //     if (userOptional.isEmpty()) {
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User '" + username + "' not found.");
+    //     }
+    //     User user = userOptional.get();
 
-        // Delete all properties associated with the user
-        user.getProperties().forEach(property -> propertyDelService.deletePropertyIfExists(property.getId()));
-        user.getProperties().clear(); // Clear the list of properties for the user
-        userService.createUser(user); // Update the user
+    //     // Delete all properties associated with the user
+    //     user.getProperties().forEach(property -> propertyDelService.deletePropertyIfExists(property.getId()));
+    //     user.getProperties().clear(); // Clear the list of properties for the user
+    //     userService.createUser(user); // Update the user
 
-        return ResponseEntity.ok("All properties for user '" + username + "' were deleted successfully.");
-    }
+    //     return ResponseEntity.ok("All properties for user '" + username + "' were deleted successfully.");
+    // }
 
     // @GetMapping("/search")
     // public List<PropertyDel> searchProperties(
