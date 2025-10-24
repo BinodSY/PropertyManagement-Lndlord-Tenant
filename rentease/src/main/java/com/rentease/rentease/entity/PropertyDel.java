@@ -15,10 +15,17 @@ public class PropertyDel {
     @Id
     private String id;
     private String houseOwner;
+    private String title;
     private String address;
-    private double rentAmount;
+    private String city;
+    private Double rentAmount;
+    private int deposit;
+    private double area;
     private int bedRooms;
     private int bathRooms;
+
     private boolean available;
-    private List<String> bookedByTenantIds = new ArrayList<>(); // store tenant IDs
+    private String bookedByTenantId;// New field to track which tenant booked the property
+    private List<String> imageUrls = new ArrayList<>(); // List to hold multiple image
+    
 }

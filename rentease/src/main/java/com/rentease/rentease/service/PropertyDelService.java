@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.rentease.rentease.entity.PropertyDel;
 import com.rentease.rentease.entity.Tenant;
@@ -39,6 +40,10 @@ public class PropertyDelService {
     // Step 1: Find user
     User user = userService.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
+
+            property.setHouseOwner(username);
+            property.setAvailable(true);
+
 
     // Step 2: Save property
     // property.setHouseOwner(username);
@@ -79,9 +84,9 @@ public class PropertyDelService {
     if (!tenant.getBookedPropertyIds().contains(propertyId)) {
         tenant.getBookedPropertyIds().add(propertyId);
     }
-    if (!property.getBookedByTenantIds().contains(tenant.getId())) {
-        property.getBookedByTenantIds().add(tenant.getId());
-    }
+    // if (property.getBookedByTenantId()==null) {
+    //     property.getBookedByTenantIds=tenant.getId();
+    // }
 
     // Mark property unavailable
     property.setAvailable(false);
@@ -98,7 +103,7 @@ public class PropertyDelService {
         tenantRepository.save(tenant);
 
         // 2. Remove tenant from property bookings & reset availability
-        property.getBookedByTenantIds().remove(tenant.getId());
+        // property.getbookedByTenantId=null;
         property.setAvailable(true);
         propertyDelRepo.save(property);
 
@@ -136,19 +141,25 @@ public class PropertyDelService {
     public PropertyDel findById(String Id) {
         return propertyDelRepo.findById(Id).orElse(null);
     }
-    // // GET: Search properties based on various criteria
-    // public List<PropertyDel> searchProperties(
-    //     String Id,
-    //     String houseOwner,
-    //     String address,
-    //     Double minRentAmount,
-    //     Double maxRentAmount,
-    //     Integer bedRooms,
-    //     Integer bathRooms) {
-        
-    //     // Implement search logic based on the provided parameters
-    //     // This is a placeholder implementation; you can customize it as needed
-    //     return propertyDelRepo.findAll(); // Replace with actual search logic
-    // }
+    // GET: Search properties based on various criteria
+
+    public List<PropertyDel> searchProperties(
+        String Id, String houseOwner, String city, Boolean available,
+        String address, Double minRentAmount, Double maxRentAmount,
+        Integer bedRooms, Integer bathRooms) {
+
+    return propertyDelRepo.findAll().stream()
+            .filter(p -> (Id == null || p.getId().equals(Id)))
+            .filter(p -> (available == null || p.isAvailable() == available))
+            .filter(p -> (houseOwner == null || p.getHouseOwner().equalsIgnoreCase(houseOwner)))
+            .filter(p -> (city == null || p.getCity().equalsIgnoreCase(city)))
+            .filter(p -> (address == null || p.getAddress().toLowerCase().contains(address.toLowerCase())))
+            .filter(p -> (minRentAmount == null || p.getRentAmount() >= minRentAmount))
+            .filter(p -> (maxRentAmount == null || p.getRentAmount() <= maxRentAmount))
+            .filter(p -> (bedRooms == null || p.getBedRooms() == bedRooms))
+            .filter(p -> (bathRooms == null || p.getBathRooms() == bathRooms))
+            .collect(Collectors.toList());
+}
+
 
 }

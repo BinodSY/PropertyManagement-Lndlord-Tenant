@@ -31,10 +31,10 @@ public class SecurityConfig {
         return http 
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/create-tenant","/create-landlord","/auth/**").permitAll()
-                        .requestMatchers("/propertiesDel/available","/propertiesDel/book-property").hasRole("TENANT")
+                        .requestMatchers("/auth/login","/create-tenant","/create-landlord").permitAll()
+                        .requestMatchers("/propertiesDel/search","/propertiesDel/available","/propertiesDel/book-property").hasRole("TENANT")
                         .requestMatchers("/tenant/**").hasRole("TENANT") // <-- allow both roles
-                        .requestMatchers("/landlord/","/propertiesDel/user-properties","/propertiesDel/properties-listing").hasRole("LANDLORD") // <-- allow both roles
+                        .requestMatchers("/landlord/**","/propertiesDel/**","/propertiesDel/properties-listing").hasRole("LANDLORD") // <-- allow both roles
                         .requestMatchers("/adminn/**").hasRole("Rentease_ADMIN@")
                         .anyRequest().authenticated()
                         

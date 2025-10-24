@@ -23,7 +23,9 @@ public class Tenant {
     @NonNull
     private String email;
     @NonNull
-    private String name;
+    private String firstName;
+    @NonNull
+    private String lastName;
     private String role = "TENANT";
     private List<String> bookedPropertyIds = new ArrayList<>(); // store property IDs
 }

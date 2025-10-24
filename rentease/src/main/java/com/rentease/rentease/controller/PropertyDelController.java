@@ -36,7 +36,7 @@ public class PropertyDelController {
 
 
     // GET: Retrieve all property details
-    @GetMapping
+    @GetMapping("/listed-properties")
     public ResponseEntity<List<PropertyDel>> getAllProperties() {
         List<PropertyDel> properties = propertyDelService.getAllProperties();
         return ResponseEntity.ok(properties);
@@ -155,21 +155,23 @@ public class PropertyDelController {
     //     return ResponseEntity.ok("All properties for user '" + username + "' were deleted successfully.");
     // }
 
-    // @GetMapping("/search")
-    // public List<PropertyDel> searchProperties(
-    //     @RequestParam(required = false) String Id,
-    //     @RequestParam(required = false) String houseOwner,
-    //     @RequestParam(required = false) String address,
-    //     @RequestParam(required = false) Double minRentAmount,
-    //     @RequestParam(required = false) Double maxRentAmount,
-    //     @RequestParam(required = false) Integer bedRooms,
-    //     @RequestParam(required = false) Integer bathRooms) {
-    //     // The service layer contains a placeholder for search logic.
-    //     // This should be implemented for full functionality.
-    //     return propertyDelService.searchProperties(
-    //         Id, houseOwner, address, minRentAmount, maxRentAmount, bedRooms, bathRooms
-    //     );
-    // }
+    @GetMapping("/search")
+public List<PropertyDel> searchProperties(
+        @RequestParam(required = false) String Id,
+        @RequestParam(required = false) String houseOwner,
+        @RequestParam(required = false) String city,
+        @RequestParam(required = false) Boolean available,
+        @RequestParam(required = false) String address,
+        @RequestParam(required = false) Double minRentAmount,
+        @RequestParam(required = false) Double maxRentAmount,
+        @RequestParam(required = false) Integer bedRooms,
+        @RequestParam(required = false) Integer bathRooms) {
+
+    return propertyDelService.searchProperties(
+            Id, houseOwner, city, available, address,
+            minRentAmount, maxRentAmount, bedRooms, bathRooms
+    );
+}
 
 
 }

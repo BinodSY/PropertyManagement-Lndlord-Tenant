@@ -28,7 +28,9 @@ public class User {
     @NonNull
     private String email;
     @NonNull
-    private String name;
+    private String firstName;
+    @NonNull
+    private String lastName;
     private String role = "LANDLORD";
                                                     
     private List<String> propertyIds = new ArrayList<>();
