@@ -2,6 +2,7 @@ package com.payment.payment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+//microserives payment
 
 @SpringBootApplication
 public class PaymentApplication {
